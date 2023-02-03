@@ -1,45 +1,51 @@
 #include "main.h"
 
-uint16_t EEMEM eeSavedCode = 0x207E; // NEC code for LG remote and unused SimpLink button
-
-void blink()
-{
-	PORTC |= _BV(PINC3); // Debug LED on
-	TIMER_REG = 0; // Wait 20ms
-	while(TIMER_REG < CONV(20000));
-	PORTC &= ~_BV(PINC3); // Debug LED off
-}
-
-void codeMatch(unsigned int code)
-{ // The input IR code is matching the learned code
-	START_DDR |= _BV(START_PIN); // pull-down the pin connected to the computer's power on button
-	blink();
-	START_DDR &= ~(_BV(START_PIN)); // Hi-Z again
-}
-
-void init()
-{
-	TIMER_INIT(); // Initialize timer's prescaler
-	if(IR_ENABLE_PULLUP) // Enable pull-up on IR pin
-	IR_PORT |= _BV(IR_PIN_NUM);
-	PORTB |= _BV(PINB0); // Jumper pull-up
-	DDRC = 255; // Debug LED output - all pins on PORTC
-	uartInit();
-}
-
 int main(void)
 {
-	unsigned int savedCode;
-	unsigned int code = 0;
-	unsigned int time;
-	unsigned char protocolLetter;
-	init();
-	savedCode = eeprom_read_word(&eeSavedCode);
-	OSCCAL = 0x70;
+	//unsigned int savedCode;
+	//unsigned int code = 0;
+	//unsigned int time;
+	//unsigned char protocolLetter;
+	//init();
+	//savedCode = eeprom_read_word(&eeSavedCode);
+	//OSCCAL = 0x70;
+	
+	// lcd test
+		DDRD = 0xFF; PORTD = 0x00;
+		
+		LCD_Init();
+		LCD_DisplEnable_CursOnOffBlink(1, 0, 0);
+		
+		LCD_String("                ", 0, 0);
+		LCD_String("                ", 1, 0);
+
+		drawBigDigits(0, 0);
+		drawBigDigits(1, 4);
+		drawBigDigits(2, 9);
+		drawBigDigits(3, 13);
 
 	while(1)
 	{
-		PORTC ^= _BV(PINC5);
+		
+				LCD_String("+ ", 0, 7);
+				LCD_String(" +", 1, 7);
+				LCD_String("+", 1, 3);
+				LCD_String("+", 0, 12);
+				LCD_String(" ", 0, 3);
+				LCD_String(" ", 1, 12);
+				
+				_delay_ms(1000);
+				
+				LCD_String(" +", 0, 7);
+				LCD_String("+ ", 1, 7);
+				LCD_String("+", 1, 3);
+				LCD_String("+", 0, 12);
+				LCD_String(" ", 0, 3);
+				LCD_String(" ", 1, 12);
+				
+				_delay_ms(1000);
+		
+/*		PORTC ^= _BV(PINC5);
 		while(IR_HIGH);
 		PORTC ^= _BV(PINC5);
 		TIMER_REG = 0;
@@ -87,7 +93,7 @@ int main(void)
 
 		uartTransmitByte(protocolLetter);	
 		uartTransmitHex(0, code);
-		uartNewLine();
+		uartNewLine(); */
 	}
-	return 0;
+	//return 0;
 }

@@ -2,9 +2,7 @@
 # Automatically-generated file. Do not edit or delete the file
 ################################################################################
 
-ir_rem.c
+hd44780.c
 
 main.c
-
-uart.c
 

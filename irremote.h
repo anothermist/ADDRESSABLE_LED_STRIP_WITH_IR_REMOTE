@@ -1,29 +1,26 @@
-#ifndef IR_REM_H_
-#define IR_REM_H_
+#ifndef IRREMOTE_H_
+#define IRREMOTE_H_
 
 #include "main.h"
 
-unsigned int protocolNEC(unsigned int code);
-unsigned int protocolRC5(unsigned int code);
-unsigned int protocolSIRC(unsigned int code);
+void irrTimerInit();
+unsigned int irrDecode();
 
-// Define your IR port and IR pin
+unsigned int irrProtocolNEC(unsigned int code);
+unsigned int irrProtocolRC5(unsigned int code);
+unsigned int irrProtocolSIRC(unsigned int code);
+
 #define IR_PIN PINB
 #define IR_PIN_NUM PINB2
 #define IR_PORT PORTB
 
 #define IR_ENABLE_PULLUP 1
 
-// Define pin to start computer - pull-down
-#define START_PORT	PORTB
-#define START_DDR	DDRB
-#define START_PIN	PINB1
-
-#define NEC_REPEAT_RATE 5 // Define repeat rate of long-hold buttons
+#define NEC_REPEAT_RATE 5
 #define RC5_REPEAT_RATE 5
 #define SIRC_REPEAT_RATE 5
 
-#define USED_TIMER 0 // Only timer 0 and 1
+#define USED_TIMER 0
 
 #if USED_TIMER == 0
 #define TIMER_PRESCALER 1024

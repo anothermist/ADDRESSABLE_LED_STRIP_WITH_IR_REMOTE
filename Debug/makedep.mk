@@ -4,5 +4,9 @@
 
 hd44780.c
 
+irremote.c
+
 main.c
+
+uart.c
 

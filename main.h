@@ -16,6 +16,7 @@
 #include "hd44780.h"
 #include "irremote.h"
 #include "uart.h"
+#include "twi.h"
 
 
 #endif /* MAIN_H_ */

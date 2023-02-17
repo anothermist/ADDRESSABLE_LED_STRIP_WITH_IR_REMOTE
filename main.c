@@ -10,6 +10,8 @@ unsigned int timerCount = 0;
 unsigned int secUpTime = 0;
 unsigned int irrDelayCount = 0;
 
+unsigned char sec,min,hour,day,date,month,year;
+
 
 
 //DDRD = 0xFF; PORTD = 0x00;
@@ -57,6 +59,9 @@ int main(void)
 	irrTimerInit();
 	uartInit();
 	LCD_Init();
+	TWI_Init();
+	
+	
 	LCD_DisplEnable_CursOnOffBlink(1, 0, 0);
 	LCD_String("                ", 0, 0);
 	LCD_String("                ", 1, 0);
@@ -87,6 +92,29 @@ int main(void)
 	savedCode = eeprom_read_word(&eeSavedCode);
 	
 	while (1) {
+		
+		TWI_SendByteByADDR(0,0b11010000);
+		_delay_ms(1000);
+		TWI_StartCondition();
+		TWI_SendByte(0b11010001);
+		sec = TWI_ReadByte();
+		min = TWI_ReadByte();
+		hour = TWI_ReadByte();
+		day = TWI_ReadByte();
+		date = TWI_ReadByte();
+		month = TWI_ReadByte();
+		year = TWI_ReadLastByte();
+		TWI_StopCondition();
+		//sec = RTC_ConvertFromDec(sec);
+		//min = RTC_ConvertFromDec(min);
+		//hour = RTC_ConvertFromDec(hour);
+		//day = RTC_ConvertFromDec(day);
+		//year = RTC_ConvertFromDec(year);
+		//month = RTC_ConvertFromDec(month);
+		//date = RTC_ConvertFromDec(date);
+		
+		uartTransmitHex(0, sec);
+		uartNewLine();
 		
 		if (IR_HIGH)
 		{

@@ -9,8 +9,8 @@ unsigned int irrValue = 0;
 unsigned int timerCount = 0;
 unsigned int secUpTime = 0;
 unsigned int irrDelayCount = 0;
-
-unsigned char sec,min,hour,day,date,month,year;
+unsigned int rtc_Sec, rtc_Min, rtc_Hrs, rtc_WDay, rtc_Date, rtc_Month, rtc_Year,
+last_Sec;
 
 
 
@@ -53,76 +53,99 @@ unsigned char sec,min,hour,day,date,month,year;
 //}
 
 
-int main(void)
-{
+int main(void) {
 	DDRD = 0xFF; PORTD = 0x00;
 	irrTimerInit();
 	uartInit();
 	LCD_Init();
 	TWI_Init();
 	
-	
 	LCD_DisplEnable_CursOnOffBlink(1, 0, 0);
 	LCD_String("                ", 0, 0);
 	LCD_String("                ", 1, 0);
 	
-	drawBigDigits(0, 0);
-	drawBigDigits(1, 4);
-	drawBigDigits(2, 9);
-	drawBigDigits(3, 13);
+	//drawBigDigits(0, 0);
+	//drawBigDigits(1, 4);
+	//drawBigDigits(2, 9);
+	//drawBigDigits(3, 13);
 	
-	LCD_String("+ ", 0, 7);
-	LCD_String(" +", 1, 7);
-	LCD_String("+", 1, 3);
-	LCD_String("+", 0, 12);
-	LCD_String(" ", 0, 3);
-	LCD_String(" ", 1, 12);
+	//LCD_String("+ ", 0, 7);
+	//LCD_String(" +", 1, 7);
+	//LCD_String("+", 1, 3);
+	//LCD_String("+", 0, 12);
+	//LCD_String(" ", 0, 3);
+	//LCD_String(" ", 1, 12);
 	
-	_delay_ms(1000);
+	//_delay_ms(1000);
 	
-	LCD_String(" +", 0, 7);
-	LCD_String("+ ", 1, 7);
-	LCD_String("+", 1, 3);
-	LCD_String("+", 0, 12);
-	LCD_String(" ", 0, 3);
-	LCD_String(" ", 1, 12);
+	//LCD_String(" +", 0, 7);
+	//LCD_String("+ ", 1, 7);
+	//LCD_String("+", 1, 3);
+	//LCD_String("+", 0, 12);
+	//LCD_String(" ", 0, 3);
+	//LCD_String(" ", 1, 12);
 	
-	_delay_ms(1000);
-
+	//DS3231_setSec(0);
+	//DS3231_setMin(38);
+	//DS3231_setHrs(9);
+	//DS3231_setWDay(6);
+	//DS3231_setDate(18);
+	//DS3231_setMonth(2);
+	//DS3231_setYear(23);
+	
 	savedCode = eeprom_read_word(&eeSavedCode);
 	
 	while (1) {
 		
-		TWI_SendByteByADDR(0,0b11010000);
-		_delay_ms(1000);
-		TWI_StartCondition();
-		TWI_SendByte(0b11010001);
-		sec = TWI_ReadByte();
-		min = TWI_ReadByte();
-		hour = TWI_ReadByte();
-		day = TWI_ReadByte();
-		date = TWI_ReadByte();
-		month = TWI_ReadByte();
-		year = TWI_ReadLastByte();
-		TWI_StopCondition();
-		//sec = RTC_ConvertFromDec(sec);
-		//min = RTC_ConvertFromDec(min);
-		//hour = RTC_ConvertFromDec(hour);
-		//day = RTC_ConvertFromDec(day);
-		//year = RTC_ConvertFromDec(year);
-		//month = RTC_ConvertFromDec(month);
-		//date = RTC_ConvertFromDec(date);
+		DS3231_Update();
+		rtc_Sec = DS3231_getSec();
 		
-		uartTransmitHex(0, sec);
-		uartNewLine();
+		if (last_Sec != rtc_Sec) {
+			last_Sec = rtc_Sec;
+			rtc_Min = DS3231_getMin();
+			rtc_Hrs = DS3231_getHrs();
+			rtc_WDay = DS3231_getWDay();
+			rtc_Date = DS3231_getDate();
+			rtc_Month = DS3231_getMonth();
+			rtc_Year = DS3231_getYear();
+			
+			if (rtc_Sec % 2 != 0) {
+				LCD_String("+ ", 0, 7);
+				LCD_String(" +", 1, 7);
+				LCD_String("+", 1, 3);
+				LCD_String("+", 0, 12);
+				LCD_String(" ", 0, 3);
+				LCD_String(" ", 1, 12);
+				} else {
+				LCD_String(" +", 0, 7);
+				LCD_String("+ ", 1, 7);
+				LCD_String("+", 1, 3);
+				LCD_String("+", 0, 12);
+				LCD_String(" ", 0, 3);
+				LCD_String(" ", 1, 12);
+			}
+			
+				drawBigDigits(rtc_Hrs/10, 0);
+				drawBigDigits(rtc_Hrs % 10, 4);
+				drawBigDigits(rtc_Min/10, 9);
+				drawBigDigits(rtc_Min % 10, 13);
+				
+				drawBigDigits(0, 0);
+			
+			
+			
+			char time_string[26];
+			snprintf(time_string, 26, "TIME %02d:%02d:%02d %02d %02d %02d %02d %02d %02d %02d",
+			rtc_Hrs, rtc_Min, rtc_Sec, rtc_WDay, rtc_Date, rtc_Month, rtc_Year);
+			uartTransmitString(time_string); uartNewLine();
+			
+		}
 		
-		if (IR_HIGH)
-		{
+		if (IR_HIGH) {
 			
 			unsigned int irrValueNow = irrDecode();
 			
-			if ((irrValueNow) && (irrValue != irrValueNow || irrDelayCount != secUpTime))
-			{
+			if ((irrValueNow) && (irrValue != irrValueNow || irrDelayCount != secUpTime)) {
 				irrDelayCount = secUpTime;
 				uartTransmitHex(0, irrValueNow);
 				uartNewLine();
@@ -136,8 +159,7 @@ int main(void)
 				snprintf(code_string, 11, "CODE: 0x%02X ", irrValueNow);
 				LCD_String(code_string, 0, 0);
 				
-				if (irrValueNow == savedCode)
-				{
+				if (irrValueNow == savedCode) {
 					//clear
 				}
 				irrValue = irrValueNow;

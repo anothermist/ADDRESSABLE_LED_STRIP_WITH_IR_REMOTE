@@ -1,8 +1,6 @@
 #include "uart.h"
 
-
-void uartInit()
-{
+void uartInit() {
 	unsigned int ubrr = ((F_CPU/16)/(UART_BAUD+1));
 	UBRR0H = (unsigned char)(ubrr>>8);
 	UBRR0L = (unsigned char)ubrr;
@@ -12,8 +10,7 @@ void uartInit()
 	uartNewLine();
 }
 
-unsigned char uartReceiveByte()
-{ // Function to receive a single byte
+unsigned char uartReceiveByte() { // Function to receive a single byte
 	unsigned char data, status;
 	
 	while(!(UCSR0A & (1<<RXC0))); 	// Wait for incomming data
@@ -24,14 +21,12 @@ unsigned char uartReceiveByte()
 	return(data);
 }
 
-void uartTransmitByte(unsigned char data)
-{ //	Function to transmit a single byte
+void uartTransmitByte(unsigned char data) { //	Function to transmit a single byte
 	while (!(UCSR0A & (1<<UDRE0)));   /* Wait for empty transmit buffer */
 	UDR0 = data; 			        /* Start transmition */
 }
 
-void uartTransmitHex(unsigned char dataType, unsigned long data)
-{ // Function to transmit hex format data. first argument indicates type: CHAR, INT or LONG. Second argument is the data to be displayed
+void uartTransmitHex(unsigned char dataType, unsigned long data) { // Function to transmit hex format data. first argument indicates type: CHAR, INT or LONG. Second argument is the data to be displayed
 	unsigned char count, i, temp;
 	unsigned char dataString[] = "0x        ";
 
@@ -51,19 +46,16 @@ void uartTransmitHex(unsigned char dataType, unsigned long data)
 	uartTransmitString (dataString);
 }
 
-void uartTransmitString(unsigned char* string)
-{ // Function to transmit a string in RAM
+void uartTransmitString(unsigned char* string) { // Function to transmit a string in RAM
 	while (*string)
 	uartTransmitByte(*string++);
 }
 
-void uartTransmitString_F(char* string)
-{ // Function to transmit a string in Flash
+void uartTransmitString_F(char* string) { // Function to transmit a string in Flash
 	while (pgm_read_byte(&(*string)))
 	uartTransmitByte(pgm_read_byte(&(*string++)));
 }
 
-void uartNewLine()
-{
+void uartNewLine() {
 	TX_NEWLINE;
 }

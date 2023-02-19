@@ -5,15 +5,13 @@ unsigned int code = 0;
 unsigned int time;
 unsigned char protocolLetter;
 
-void irrTimerInit()
-{
+void irrTimerInit() {
 	TIMER_INIT();
 	if (IR_ENABLE_PULLUP)
 	IR_PORT |= _BV(IR_PIN_NUM);
 }
 
-unsigned int irrDecode()
-{
+unsigned int irrDecode() {
 	time = TIMER_REG;
 	TIMER_REG = 0;
 
@@ -36,8 +34,7 @@ unsigned int irrDecode()
 	return (decoded);
 }
 
-unsigned int irrProtocolNEC(unsigned int code)
-{
+unsigned int irrProtocolNEC(unsigned int code) {
 	unsigned char bitVal;
 	unsigned int time;
 	unsigned char i;
@@ -53,12 +50,10 @@ unsigned int irrProtocolNEC(unsigned int code)
 
 	PORTC ^= _BV(PINC5);
 	
-	if (time > CONV(4200)) // 4200 us
-	{
+	if (time > CONV(4200)) { // 4200 us
 		repeatCount = 0; // regular button press
 		} else {
-		if (++repeatCount == NEC_REPEAT_RATE) // hold button press send last keycode
-		{
+		if (++repeatCount == NEC_REPEAT_RATE) { // hold button press send last keycode
 			repeatCount = 0;
 			return lastCode;
 		}
@@ -67,8 +62,7 @@ unsigned int irrProtocolNEC(unsigned int code)
 	
 	code = 0;
 	
-	for (i = 0; i < 32; i++) // Read 32 data bits
-	{
+	for (i = 0; i < 32; i++) { // Read 32 data bits
 		while (IR_LOW);
 		/*	if (TIMER_REG > CONV(5000))
 		return 0;*/
@@ -79,8 +73,7 @@ unsigned int irrProtocolNEC(unsigned int code)
 		time = TIMER_REG;
 		TIMER_REG = 0;
 		
-		if (time > CONV(1650)) // 1650 us
-		{
+		if (time > CONV(1650)) { // 1650 us
 			bitVal = 1;
 			} else {
 			bitVal = 0;
@@ -88,14 +81,12 @@ unsigned int irrProtocolNEC(unsigned int code)
 
 		PORTC ^= _BV(PINC5);
 		
-		if ((i < 8) || (i >= 16 && i < 24))
-		{
+		if ((i < 8) || (i >= 16 && i < 24)) {
 			code = code << 1;
 			code |= bitVal;
 		}
 
-		if ((i >= 8 && i < 16) || (i >= 24 && i < 32))
-		{
+		if ((i >= 8 && i < 16) || (i >= 24 && i < 32)) {
 			invertedCode = invertedCode << 1;
 			invertedCode |= bitVal;
 		}
@@ -108,8 +99,7 @@ unsigned int irrProtocolNEC(unsigned int code)
 	return code;
 }
 
-unsigned int irrProtocolRC5(unsigned int code)
-{
+unsigned int irrProtocolRC5(unsigned int code) {
 	unsigned char repeatBit;
 	unsigned char i;
 
@@ -130,8 +120,7 @@ unsigned int irrProtocolRC5(unsigned int code)
 	while (TIMER_REG < CONV(880));
 	TIMER_REG = 0;
 
-	for (i = 0; i < 11; i++) // Read 12 data bits (5 address & 7 command)
-	{
+	for (i = 0; i < 11; i++) { // Read 12 data bits (5 address & 7 command)
 		code = code << 1;
 		PORTC ^= _BV(PINC5);
 		errorBit = IR_VAL;
@@ -162,10 +151,8 @@ unsigned int irrProtocolRC5(unsigned int code)
 		TIMER_REG = 0;
 	}
 
-	if (code == lastCode && repeatBit == lastRepeatBit)
-	{
-		if (++repeatCount == RC5_REPEAT_RATE)
-		{
+	if (code == lastCode && repeatBit == lastRepeatBit) {
+		if (++repeatCount == RC5_REPEAT_RATE) {
 			repeatCount = 0;
 			return code;
 			} else {
@@ -173,8 +160,7 @@ unsigned int irrProtocolRC5(unsigned int code)
 		}
 	}
 
-	if (repeatBit != lastRepeatBit)
-	{
+	if (repeatBit != lastRepeatBit) {
 		repeatCount = 0;
 	}
 
@@ -183,16 +169,14 @@ unsigned int irrProtocolRC5(unsigned int code)
 	return code;
 }
 
-unsigned int irrProtocolSIRC(unsigned int code)
-{
+unsigned int irrProtocolSIRC(unsigned int code) {
 	unsigned int time;
 	unsigned char i;
 	static unsigned int lastCode = 0;
 
 	code = 0;
 
-	for (i = 0; i < 12; i++) // Read 32 data bits
-	{
+	for (i = 0; i < 12; i++) { // Read 32 data bits
 		while (IR_LOW)
 		if (TIMER_REG > CONV(2000))
 		return 0;
@@ -212,10 +196,8 @@ unsigned int irrProtocolSIRC(unsigned int code)
 		code |= 1;
 	}
 	
-	if (code == lastCode)
-	{
-		if ((repeatCount++) == SIRC_REPEAT_RATE)
-		{
+	if (code == lastCode) {
+		if ((repeatCount++) == SIRC_REPEAT_RATE) {
 			repeatCount = 0;
 			return code;
 			} else {

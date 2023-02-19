@@ -3,8 +3,8 @@
 
 #include "math.h"
 
-//#define DS3231_I2C			hi2c1
 #define DS3231_ADDRESS		0xD0
+
 
 unsigned int decToBcd(unsigned int val);
 unsigned int bcdToDec(unsigned int val);
@@ -12,7 +12,7 @@ void DS3231_Update(void);
 unsigned int DS3231_getSec(void);
 unsigned int DS3231_getMin(void);
 unsigned int DS3231_getHrs(void);
-unsigned int DS3231_getWeekDay(void);
+unsigned int DS3231_getWDay(void);
 unsigned int DS3231_getDate(void);
 unsigned int DS3231_getMonth(void);
 unsigned int DS3231_getYear(void);
@@ -29,7 +29,7 @@ double DS3231_getTemp(void);
 void DS3231_setSec(unsigned int value);
 void DS3231_setMin(unsigned int value);
 void DS3231_setHrs(unsigned int value);
-void DS3231_setWeekDay(unsigned int value);
+void DS3231_setWDay(unsigned int value);
 void DS3231_setDate(unsigned int value);
 void DS3231_setMonth(unsigned int value);
 void DS3231_setYear(unsigned int value);
@@ -42,7 +42,7 @@ void DS3231_setAlarm2Min(unsigned int value);
 void DS3231_setAlarm2Hour(unsigned int value);
 void DS3231_setAlarm2Day(unsigned int value);
 void DS3231_setAlarm2Date(unsigned int value);
-//uint64_t DS3231_getUnix(uint64_t zoneCorrection);
-//float DS3231_getMoonDay(void);
+unsigned long DS3231_getUnix(unsigned long zoneCorrection);
+float DS3231_getMoonDay(void);
 
 #endif /* INC_DS3231_H_ */

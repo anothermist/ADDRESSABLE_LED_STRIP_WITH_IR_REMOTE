@@ -64,35 +64,6 @@ int main(void) {
 	LCD_String("                ", 0, 0);
 	LCD_String("                ", 1, 0);
 	
-	//drawBigDigits(0, 0);
-	//drawBigDigits(1, 4);
-	//drawBigDigits(2, 9);
-	//drawBigDigits(3, 13);
-	
-	//LCD_String("+ ", 0, 7);
-	//LCD_String(" +", 1, 7);
-	//LCD_String("+", 1, 3);
-	//LCD_String("+", 0, 12);
-	//LCD_String(" ", 0, 3);
-	//LCD_String(" ", 1, 12);
-	
-	//_delay_ms(1000);
-	
-	//LCD_String(" +", 0, 7);
-	//LCD_String("+ ", 1, 7);
-	//LCD_String("+", 1, 3);
-	//LCD_String("+", 0, 12);
-	//LCD_String(" ", 0, 3);
-	//LCD_String(" ", 1, 12);
-	
-	//DS3231_setSec(0);
-	//DS3231_setMin(38);
-	//DS3231_setHrs(9);
-	//DS3231_setWDay(6);
-	//DS3231_setDate(18);
-	//DS3231_setMonth(2);
-	//DS3231_setYear(23);
-	
 	savedCode = eeprom_read_word(&eeSavedCode);
 	
 	while (1) {
@@ -110,30 +81,18 @@ int main(void) {
 			rtc_Year = DS3231_getYear();
 			
 			if (rtc_Sec % 2 != 0) {
-				LCD_String("+ ", 0, 7);
-				LCD_String(" +", 1, 7);
-				LCD_String("+", 1, 3);
-				LCD_String("+", 0, 12);
-				LCD_String(" ", 0, 3);
-				LCD_String(" ", 1, 12);
+				LCD_String("* ", 0, 7);
+				LCD_String(" *", 1, 7);
 				} else {
-				LCD_String(" +", 0, 7);
-				LCD_String("+ ", 1, 7);
-				LCD_String("+", 1, 3);
-				LCD_String("+", 0, 12);
-				LCD_String(" ", 0, 3);
-				LCD_String(" ", 1, 12);
+				LCD_String(" *", 0, 7);
+				LCD_String("* ", 1, 7);
 			}
 			
-				drawBigDigits(rtc_Hrs/10, 0);
-				drawBigDigits(rtc_Hrs % 10, 4);
-				drawBigDigits(rtc_Min/10, 9);
-				drawBigDigits(rtc_Min % 10, 13);
-				
-				drawBigDigits(0, 0);
-			
-			
-			
+			drawBigDigits(rtc_Hrs/10, 0);
+			drawBigDigits(rtc_Hrs % 10, 4);
+			drawBigDigits(rtc_Min/10, 9);
+			drawBigDigits(rtc_Min % 10, 13);
+
 			char time_string[26];
 			snprintf(time_string, 26, "TIME %02d:%02d:%02d %02d %02d %02d %02d %02d %02d %02d",
 			rtc_Hrs, rtc_Min, rtc_Sec, rtc_WDay, rtc_Date, rtc_Month, rtc_Year);

@@ -98,7 +98,7 @@ double DS3231_getTemp(void) {
 	t += tempMSB;
 	return t;
 }
-
+/*
 void DS3231_setSec(unsigned int value) {
 	TWI_StartCondition();
 	TWI_SendByte(DS3231_ADDRESS);
@@ -409,3 +409,4 @@ float DS3231_getMoonDay(void) {
 	moonDay = I * 29.53;
 	return moonDay;
 }
+*/

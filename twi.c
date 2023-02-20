@@ -1,7 +1,8 @@
 ﻿#include "twi.h"
 
 void TWI_Init (void) {
-	TWBR=0x20; // 100 khz at 8 mhz
+	TWBR=0x02; // TWBR = 0x20; // 100 khz at 8 mhz | TWBR=0x02 // 400 khz at 8 mhz | 8000000/(16+2*2)
+	TWSR = (0<<TWPS1)|(0<<TWPS0);
 }
 
 void TWI_StartCondition(void) {

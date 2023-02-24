@@ -132,6 +132,12 @@
     <Compile Include="hd44780.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="hd44780_twi.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="hd44780_twi.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="irremote.c">
       <SubType>compile</SubType>
     </Compile>

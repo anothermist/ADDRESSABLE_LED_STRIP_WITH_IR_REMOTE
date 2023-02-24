@@ -8,7 +8,18 @@ int main(void) {
 	irrTimerInit();
 	uartInit();
 	TWI_Init();
-	lcd_init();
+	lcd_init();  lcd_twi_init();
+
+
+	lcd_set_cursor(0, 3); lcd_twi_set_cursor(0, 3);
+	lcd_string("LCD STRING 0 3");   lcd_twi_string("LCD STRING 0 3");
+
+	
+	lcd_set_cursor(1, 3); lcd_twi_set_cursor(1, 3);
+	lcd_string("LCD STRING 1 3");   lcd_twi_string("LCD STRING 1 3");
+
+	_delay_ms(1000);
+	lcd_clear(); lcd_twi_clear();
 	
 	while (1) {
 		
@@ -25,17 +36,17 @@ int main(void) {
 			rtc_Year = DS3231_getYear();
 			
 			if (rtc_Sec % 2 != 0) {
-				lcd_string("* ", 0, 7);
-				lcd_string(" *", 1, 7);
+				lcd_set_cursor(0, 7); lcd_string("* "); lcd_twi_set_cursor(0, 7); lcd_twi_string("* ");
+				lcd_set_cursor(1, 7); lcd_string(" *"); lcd_twi_set_cursor(1, 7); lcd_twi_string(" *");
 				} else {
-				lcd_string(" *", 0, 7);
-				lcd_string("* ", 1, 7);
+				lcd_set_cursor(0, 7); lcd_string(" *"); lcd_twi_set_cursor(0, 7); lcd_twi_string(" *");
+				lcd_set_cursor(1, 7); lcd_string("* "); lcd_twi_set_cursor(1, 7); lcd_twi_string("* ");
 			}
 			
-			drawBigDigits(rtc_Hrs/10, 0);
-			drawBigDigits(rtc_Hrs % 10, 4);
-			drawBigDigits(rtc_Min/10, 9);
-			drawBigDigits(rtc_Min % 10, 13);
+			lcd_drawBigDigits(rtc_Hrs/10, 0);    lcd_twi_drawBigDigits(rtc_Hrs/10, 0);
+			lcd_drawBigDigits(rtc_Hrs % 10, 4);  lcd_twi_drawBigDigits(rtc_Hrs % 10, 4);
+			lcd_drawBigDigits(rtc_Min/10, 9);    lcd_twi_drawBigDigits(rtc_Min/10, 9);
+			lcd_drawBigDigits(rtc_Min % 10, 13); lcd_twi_drawBigDigits(rtc_Min % 10, 13);
 
 			char time_string[26];
 			snprintf(time_string, 26, "TIME %02d:%02d:%02d %02d %02d %02d %02d %02d %02d %02d",
@@ -52,16 +63,16 @@ int main(void) {
 				uartTransmitHex(0, irrValueNow);
 				uartNewLine();
 				
-				lcd_string("                ", 0, 0);
-				lcd_string("                ", 1, 0);
+				lcd_set_cursor(0, 0); lcd_string("                ");
+				lcd_set_cursor(1, 0); lcd_string("                ");
 				
 				char code_string[11];
 				snprintf(code_string, 11, "CODE: 0x%02X ", irrValueNow);
-				lcd_string(code_string, 0, 0);
+				lcd_set_cursor(1, 3); lcd_string(code_string, 0, 0);
 				
 				_delay_ms(500);
-				lcd_string("                ", 0, 0);
-				lcd_string("                ", 1, 0);
+				lcd_set_cursor(0, 0); lcd_string("                ");
+				lcd_set_cursor(1, 0); lcd_string("                ");
 				
 			}
 		}

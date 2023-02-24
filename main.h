@@ -14,6 +14,7 @@
 
 #include <string.h>
 #include "hd44780.h"
+#include "hd44780_twi.h"
 #include "irremote.h"
 #include "uart.h"
 

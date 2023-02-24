@@ -82,13 +82,12 @@ void lcd_disable_autoscroll(void);
 
 void lcd_create_char(unsigned char location, unsigned char *charmap);
 
-void lcd_set_cursor(unsigned char col, unsigned char row);
+void lcd_set_cursor(unsigned char row, unsigned char col);
 
 void lcd_puts(char *string);
 void lcd_printf(char *format, ...);
 
 void lcd_symbol(unsigned char Addr, unsigned char Str, unsigned char Cursor);
-void lsd_string (char str1[], uint8_t y, uint8_t x);
-void drawBigDigits(uint8_t digit, uint8_t place);
+void lcd_drawBigDigits(uint8_t digit, uint8_t place);
 
 #endif /* HD44780_H_ */

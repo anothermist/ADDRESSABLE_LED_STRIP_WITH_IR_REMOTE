@@ -89,7 +89,6 @@ void lcd_init(void) {
   lcd_command(LCD_DISPLAYCONTROL | lcd_displayparams);
   
 	for (unsigned char i = 0; i < 8; i++) lcd_create_char(i, &UserSymbol[i][0]);
-	//LCD_UserSymbolsWrite(i, &UserSymbol[i][0]);
 	  
 	    lcd_on();
 	    lcd_clear();
@@ -171,13 +170,12 @@ void lcd_create_char(unsigned char location, unsigned char *charmap) {
   lcd_command(LCD_SETDDRAMADDR);
 }
 
-void lcd_set_cursor(unsigned char col, unsigned char row) {
+void lcd_set_cursor(unsigned char row, unsigned char col) {
   static unsigned char offsets[] = { 0x00, 0x40, 0x14, 0x54 };
-
   lcd_command(LCD_SETDDRAMADDR | (col + offsets[row]));
 }
 
-void lcd_puts(char *string) {
+void lcd_string(char *string) {
   for (char *it = string; *it; it++) {
     lcd_write(*it);
   }
@@ -190,12 +188,7 @@ void lcd_printf(char *format, ...) {
   vsnprintf(lcd_buffer, LCD_COL_COUNT + 1, format, args);
   va_end(args);
 
-  lcd_puts(lcd_buffer);
-}
-
-void lcd_string(char str1[], unsigned char y, unsigned char x) {
-	lcd_set_cursor(x, y);
-	lcd_puts(str1);
+  lcd_string(lcd_buffer);
 }
 
 #define FirstStr_StartPosition_DDRAM_Addr 0x80
@@ -207,19 +200,19 @@ void lcd_symbol(unsigned char Addr, unsigned char Str, unsigned char Cursor) {
 	if (Str == 0) {
 		x=FirstStr_StartPosition_DDRAM_Addr+Cursor;
 		
-	lcd_command(x);	//BusLinesState(&x, 0);
-	lcd_write(Addr);	//BusLinesState(&Addr, 1);
+	lcd_command(x);
+	lcd_write(Addr);
 	}
 	else
 	if (Str == 1) {
 		x=SecondStr_StartPosition_DDRAM_Addr+Cursor;
 		
-	lcd_command(x);	//BusLinesState(&x, 0);
-	lcd_write(Addr);	//BusLinesState(&Addr, 1);
+	lcd_command(x);
+	lcd_write(Addr);
 	}
 }
 
-void drawBigDigits(unsigned char digit, unsigned char place) {
+void lcd_drawBigDigits(unsigned char digit, unsigned char place) {
 	
 	switch (digit) {
 		
@@ -235,7 +228,7 @@ void drawBigDigits(unsigned char digit, unsigned char place) {
 		case 1:
 		lcd_symbol(1, 0, place);
 		lcd_symbol(2, 0, place + 1);
-		lcd_string(" ", 0, place + 2);
+		lcd_set_cursor(0, place + 2); lcd_string(" ");
 		lcd_symbol(4, 1, place);
 		lcd_symbol(7, 1, place + 1);
 		lcd_symbol(4, 1, place + 2);
@@ -263,8 +256,8 @@ void drawBigDigits(unsigned char digit, unsigned char place) {
 		lcd_symbol(3, 0, place);
 		lcd_symbol(4, 0, place + 1);
 		lcd_symbol(7, 0, place + 2);
-		lcd_string(" ", 1, place);
-		lcd_string(" ", 1, place + 1);
+		lcd_set_cursor(1, place); lcd_string(" ");
+		lcd_set_cursor(1, place + 1); lcd_string(" ");
 		lcd_symbol(7, 1, place + 2);
 		break;
 		
@@ -290,8 +283,8 @@ void drawBigDigits(unsigned char digit, unsigned char place) {
 		lcd_symbol(1, 0, place);
 		lcd_symbol(1, 0, place + 1);
 		lcd_symbol(2, 0, place + 2);
-		lcd_string(" ", 1, place);
-		lcd_string(" ", 1, place + 1);
+		lcd_set_cursor(1, place); lcd_string(" ");
+		lcd_set_cursor(1, place + 1); lcd_string(" ");
 		lcd_symbol(7, 1, place + 2);
 		break;
 		

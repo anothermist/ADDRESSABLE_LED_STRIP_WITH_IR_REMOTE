@@ -1,10 +1,10 @@
 #ifndef INC_DS3231_H_
 #define INC_DS3231_H_
 
+#include "main.h"
 #include "math.h"
 
 #define DS3231_ADDRESS		0xD0
-
 
 unsigned int decToBcd(unsigned int val);
 unsigned int bcdToDec(unsigned int val);

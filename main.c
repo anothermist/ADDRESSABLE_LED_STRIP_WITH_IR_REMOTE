@@ -7,21 +7,8 @@ int main(void) {
 	DDRD = 0xFF; PORTD = 0x00;
 	irrTimerInit();
 	uartInit();
-	LCD_Init();
 	TWI_Init();
-	
-	LCD_DisplEnable_CursOnOffBlink(1, 0, 0);
-	LCD_String("                ", 0, 0);
-	LCD_String("                ", 1, 0);
-	
-	//for (unsigned int i = 0; i < 3; i++) {
-		//LCD_String("* ", 0, 7);
-		//LCD_String(" *", 1, 7);
-		//_delay_ms(1000);
-		//LCD_String(" *", 0, 7);
-		//LCD_String("* ", 1, 7);
-		//_delay_ms(1000);
-	//}
+	lcd_init();
 	
 	while (1) {
 		
@@ -38,11 +25,11 @@ int main(void) {
 			rtc_Year = DS3231_getYear();
 			
 			if (rtc_Sec % 2 != 0) {
-				LCD_String("* ", 0, 7);
-				LCD_String(" *", 1, 7);
+				lcd_string("* ", 0, 7);
+				lcd_string(" *", 1, 7);
 				} else {
-				LCD_String(" *", 0, 7);
-				LCD_String("* ", 1, 7);
+				lcd_string(" *", 0, 7);
+				lcd_string("* ", 1, 7);
 			}
 			
 			drawBigDigits(rtc_Hrs/10, 0);
@@ -65,16 +52,16 @@ int main(void) {
 				uartTransmitHex(0, irrValueNow);
 				uartNewLine();
 				
-				LCD_String("                ", 0, 0);
-				LCD_String("                ", 1, 0);
+				lcd_string("                ", 0, 0);
+				lcd_string("                ", 1, 0);
 				
 				char code_string[11];
 				snprintf(code_string, 11, "CODE: 0x%02X ", irrValueNow);
-				LCD_String(code_string, 0, 0);
+				lcd_string(code_string, 0, 0);
 				
 				_delay_ms(500);
-				LCD_String("                ", 0, 0);
-				LCD_String("                ", 1, 0);
+				lcd_string("                ", 0, 0);
+				lcd_string("                ", 1, 0);
 				
 			}
 		}

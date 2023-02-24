@@ -11,7 +11,7 @@ int main(void) {
 	lcd_init();  lcd_twi_init();
 
 	lcd_string("LCD STRING 0 3", 0, 3);   lcd_twi_string("LCD STRING 0 3", 0, 3);
-	lcd_string("LCD STRING 1 3", 0, 3);   lcd_twi_string("LCD STRING 1 3", 0, 3);
+	lcd_string("LCD STRING 1 3", 1, 3);   lcd_twi_string("LCD STRING 1 3", 1, 3);
 
 	_delay_ms(1000);
 	lcd_clear(); lcd_twi_clear();
@@ -66,7 +66,7 @@ int main(void) {
 				
 				_delay_ms(500);
 				
-				lcd_clear(); lcd_twi_clear();			
+				lcd_clear(); lcd_twi_clear();
 			}
 		}
 	}

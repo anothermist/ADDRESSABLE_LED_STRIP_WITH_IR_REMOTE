@@ -85,9 +85,13 @@ void lcd_create_char(unsigned char location, unsigned char *charmap);
 void lcd_set_cursor(unsigned char row, unsigned char col);
 
 void lcd_puts(char *string);
+
+void lcd_string(char *puts, unsigned char row, unsigned char col);
+
 void lcd_printf(char *format, ...);
 
 void lcd_symbol(unsigned char Addr, unsigned char Str, unsigned char Cursor);
+
 void lcd_drawBigDigits(uint8_t digit, uint8_t place);
 
 #endif /* HD44780_H_ */

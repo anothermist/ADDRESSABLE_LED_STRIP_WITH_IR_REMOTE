@@ -23,17 +23,17 @@ void lcd_twi_write(unsigned char value) {
 }
 
 void lcd_twi_send(unsigned char value, unsigned char mode) {
-  lcd_twi_write_nibble(value >> 4);
-  lcd_twi_write_nibble(value);
+	lcd_twi_write_nibble(value >> 4);
+	lcd_twi_write_nibble(value);
 }
 
 void lcd_twi_write_nibble(unsigned char nibble) {
-		nibble<<=4;
-		E1;
-		_delay_ms(0.3);
-		TWI_SendByteByADDR(portlcd|nibble,0b01001110);
-		E0;
-		_delay_ms(0.3);
+	nibble<<=4;
+	E1;
+	_delay_ms(0.3);
+	TWI_SendByteByADDR(portlcd|nibble,0b01001110);
+	E0;
+	_delay_ms(0.3);
 }
 
 unsigned char UserSymbol_twi[8][8] = {
@@ -66,108 +66,112 @@ void lcd_twi_init(void) {
 	_delay_ms(1);
 	setled();
 	setwrite();
-			
+	
 	for (unsigned char i = 0; i < 8; i++) lcd_twi_create_char(i, &UserSymbol_twi[i][0]);
-			
+	
 	lcd_twi_on();
 	lcd_twi_clear();
 }
 
 void lcd_twi_on(void) {
-  lcd_twi_displayparams |= LCD_DISPLAYON;
-  lcd_twi_command(LCD_DISPLAYCONTROL | lcd_twi_displayparams);
+	lcd_twi_displayparams |= LCD_DISPLAYON;
+	lcd_twi_command(LCD_DISPLAYCONTROL | lcd_twi_displayparams);
 }
 
 void lcd_twi_off(void) {
-  lcd_twi_displayparams &= ~LCD_DISPLAYON;
-  lcd_twi_command(LCD_DISPLAYCONTROL | lcd_twi_displayparams);
+	lcd_twi_displayparams &= ~LCD_DISPLAYON;
+	lcd_twi_command(LCD_DISPLAYCONTROL | lcd_twi_displayparams);
 }
 
 void lcd_twi_clear(void) {
-  lcd_twi_command(LCD_CLEARDISPLAY);
-  _delay_ms(2);
+	lcd_twi_command(LCD_CLEARDISPLAY);
+	_delay_ms(2);
 }
 
 void lcd_twi_return_home(void) {
-  lcd_twi_command(LCD_RETURNHOME);
-  _delay_ms(2);
+	lcd_twi_command(LCD_RETURNHOME);
+	_delay_ms(2);
 }
 
 void lcd_twi_enable_blinking(void) {
-  lcd_twi_displayparams |= LCD_BLINKON;
-  lcd_twi_command(LCD_DISPLAYCONTROL | lcd_twi_displayparams);
+	lcd_twi_displayparams |= LCD_BLINKON;
+	lcd_twi_command(LCD_DISPLAYCONTROL | lcd_twi_displayparams);
 }
 
 void lcd_twi_disable_blinking(void) {
-  lcd_twi_displayparams &= ~LCD_BLINKON;
-  lcd_twi_command(LCD_DISPLAYCONTROL | lcd_twi_displayparams);
+	lcd_twi_displayparams &= ~LCD_BLINKON;
+	lcd_twi_command(LCD_DISPLAYCONTROL | lcd_twi_displayparams);
 }
 
 void lcd_twi_enable_cursor(void) {
-  lcd_twi_displayparams |= LCD_CURSORON;
-  lcd_twi_command(LCD_DISPLAYCONTROL | lcd_twi_displayparams);
+	lcd_twi_displayparams |= LCD_CURSORON;
+	lcd_twi_command(LCD_DISPLAYCONTROL | lcd_twi_displayparams);
 }
 
 void lcd_twi_disable_cursor(void) {
-  lcd_twi_displayparams &= ~LCD_CURSORON;
-  lcd_twi_command(LCD_DISPLAYCONTROL | lcd_twi_displayparams);
+	lcd_twi_displayparams &= ~LCD_CURSORON;
+	lcd_twi_command(LCD_DISPLAYCONTROL | lcd_twi_displayparams);
 }
 
 void lcd_twi_scroll_left(void) {
-  lcd_twi_command(LCD_CURSORSHIFT | LCD_DISPLAYMOVE | LCD_MOVELEFT);
+	lcd_twi_command(LCD_CURSORSHIFT | LCD_DISPLAYMOVE | LCD_MOVELEFT);
 }
 
 void lcd_twi_scroll_right(void) {
-  lcd_twi_command(LCD_CURSORSHIFT | LCD_DISPLAYMOVE | LCD_MOVERIGHT);
+	lcd_twi_command(LCD_CURSORSHIFT | LCD_DISPLAYMOVE | LCD_MOVERIGHT);
 }
 
 void lcd_twi_set_left_to_right(void) {
-  lcd_twi_displayparams |= LCD_ENTRYLEFT;
-  lcd_twi_command(LCD_ENTRYMODESET | lcd_twi_displayparams);
+	lcd_twi_displayparams |= LCD_ENTRYLEFT;
+	lcd_twi_command(LCD_ENTRYMODESET | lcd_twi_displayparams);
 }
 
 void lcd_twi_set_right_to_left(void) {
-  lcd_twi_displayparams &= ~LCD_ENTRYLEFT;
-  lcd_twi_command(LCD_ENTRYMODESET | lcd_twi_displayparams);
+	lcd_twi_displayparams &= ~LCD_ENTRYLEFT;
+	lcd_twi_command(LCD_ENTRYMODESET | lcd_twi_displayparams);
 }
 
 void lcd_twi_enable_autoscroll(void) {
-  lcd_twi_displayparams |= LCD_ENTRYSHIFTINCREMENT;
-  lcd_twi_command(LCD_ENTRYMODESET | lcd_twi_displayparams);
+	lcd_twi_displayparams |= LCD_ENTRYSHIFTINCREMENT;
+	lcd_twi_command(LCD_ENTRYMODESET | lcd_twi_displayparams);
 }
 
 void lcd_twi_disable_autoscroll(void) {
-  lcd_twi_displayparams &= ~LCD_ENTRYSHIFTINCREMENT;
-  lcd_twi_command(LCD_ENTRYMODESET | lcd_twi_displayparams);
+	lcd_twi_displayparams &= ~LCD_ENTRYSHIFTINCREMENT;
+	lcd_twi_command(LCD_ENTRYMODESET | lcd_twi_displayparams);
 }
 
 void lcd_twi_create_char(unsigned char location, unsigned char *charmap) {
-  lcd_twi_command(LCD_SETCGRAMADDR | ((location & 0x7) << 3));
-  for (int i = 0; i < 8; i++) {
-    lcd_twi_write(charmap[i]);
-  }
-  lcd_twi_command(LCD_SETDDRAMADDR);
+	lcd_twi_command(LCD_SETCGRAMADDR | ((location & 0x7) << 3));
+	for (int i = 0; i < 8; i++) {
+		lcd_twi_write(charmap[i]);
+	}
+	lcd_twi_command(LCD_SETDDRAMADDR);
 }
 
 void lcd_twi_set_cursor(unsigned char row, unsigned char col) {
-  static unsigned char offsets[] = { 0x00, 0x40, 0x14, 0x54 };
-  lcd_twi_command(LCD_SETDDRAMADDR | (col + offsets[row]));
+	static unsigned char offsets[] = { 0x00, 0x40, 0x14, 0x54 };
+	lcd_twi_command(LCD_SETDDRAMADDR | (col + offsets[row]));
 }
 
-void lcd_twi_string(char *string) {
-	for (char *it = string; *it; it++) {
-		lcd_twi_write(*it);
-	}
+void lcd_twi_puts(char *puts) {
+	for (char *it = puts; *it; it++) lcd_twi_write(*it);
+}
+
+void lcd_twi_string(char *puts, unsigned char row, unsigned char col) {
+	static unsigned char offsets[] = { 0x00, 0x40, 0x14, 0x54 };
+	lcd_twi_command(LCD_SETDDRAMADDR | (col + offsets[row]));
+	for (char *it = puts; *it; it++) lcd_twi_write(*it);
 }
 
 void lcd_twi_printf(char *format, ...) {
-  va_list args;
+	va_list args;
 
-  va_start(args, format);
-  vsnprintf(lcd_twi_buffer, LCD_COL_COUNT + 1, format, args);
-  va_end(args);
+	va_start(args, format);
+	vsnprintf(lcd_twi_buffer, LCD_COL_COUNT + 1, format, args);
+	va_end(args);
 
-  lcd_twi_string(lcd_twi_buffer);
+	lcd_twi_puts(lcd_twi_buffer);
 }
 
 #define FirstStr_StartPosition_DDRAM_Addr 0x80
@@ -179,15 +183,15 @@ void lcd_twi_symbol(unsigned char Addr, unsigned char Str, unsigned char Cursor)
 	if (Str == 0) {
 		x=FirstStr_StartPosition_DDRAM_Addr+Cursor;
 		
-	lcd_twi_command(x);
-	lcd_twi_write(Addr);
+		lcd_twi_command(x);
+		lcd_twi_write(Addr);
 	}
 	else
 	if (Str == 1) {
 		x=SecondStr_StartPosition_DDRAM_Addr+Cursor;
 		
-	lcd_twi_command(x);
-	lcd_twi_write(Addr);
+		lcd_twi_command(x);
+		lcd_twi_write(Addr);
 	}
 }
 
@@ -207,7 +211,7 @@ void lcd_twi_drawBigDigits(unsigned char digit, unsigned char place) {
 		case 1:
 		lcd_twi_symbol(1, 0, place);
 		lcd_twi_symbol(2, 0, place + 1);
-		lcd_twi_set_cursor(0, place + 2); lcd_twi_string(" ");
+		lcd_twi_string(" ", 0, place + 2);
 		lcd_twi_symbol(4, 1, place);
 		lcd_twi_symbol(7, 1, place + 1);
 		lcd_twi_symbol(4, 1, place + 2);
@@ -235,8 +239,8 @@ void lcd_twi_drawBigDigits(unsigned char digit, unsigned char place) {
 		lcd_twi_symbol(3, 0, place);
 		lcd_twi_symbol(4, 0, place + 1);
 		lcd_twi_symbol(7, 0, place + 2);
-		lcd_twi_set_cursor(1, place);     lcd_twi_string(" ");
-		lcd_twi_set_cursor(1, place + 1); lcd_twi_string(" ");
+		lcd_twi_string(" ", 1, place);
+		lcd_twi_string(" ", 1, place + 1);
 		lcd_twi_symbol(7, 1, place + 2);
 		break;
 		
@@ -262,8 +266,8 @@ void lcd_twi_drawBigDigits(unsigned char digit, unsigned char place) {
 		lcd_twi_symbol(1, 0, place);
 		lcd_twi_symbol(1, 0, place + 1);
 		lcd_twi_symbol(2, 0, place + 2);
-		lcd_twi_set_cursor(1, place);     lcd_twi_string(" ");
-		lcd_twi_set_cursor(1, place + 1); lcd_twi_string(" ");
+		lcd_twi_string(" ", 1, place);
+		lcd_twi_string(" ", 1, place + 1);
 		lcd_twi_symbol(7, 1, place + 2);
 		break;
 		

@@ -1,4 +1,5 @@
 #include "hd44780_twi.h"
+#include "twi.h"
 
 #include <stdarg.h>
 #include <stdio.h>
@@ -13,12 +14,12 @@ static unsigned char lcd_twi_displayparams;
 static char lcd_twi_buffer[LCD_COL_COUNT + 1];
 
 void lcd_twi_command(unsigned char command) {
-	RS0;
+	RS0
 	lcd_twi_send(command, 0);
 }
 
 void lcd_twi_write(unsigned char value) {
-	RS1;
+	RS1
 	lcd_twi_send(value, 1);
 }
 
@@ -29,10 +30,10 @@ void lcd_twi_send(unsigned char value, unsigned char mode) {
 
 void lcd_twi_write_nibble(unsigned char nibble) {
 	nibble<<=4;
-	E1;
+	E1
 	_delay_ms(0.3);
 	TWI_SendByteByADDR(portlcd|nibble,0b01001110);
-	E0;
+	E0
 	_delay_ms(0.3);
 }
 
@@ -64,8 +65,8 @@ void lcd_twi_init(void) {
 	_delay_ms(1);
 	lcd_twi_send(0b00000110, 0); //invisible cursor from right to left
 	_delay_ms(1);
-	setled();
-	setwrite();
+	SETLED
+	SETWRITE
 	
 	for (unsigned char i = 0; i < 8; i++) lcd_twi_create_char(i, &UserSymbol_twi[i][0]);
 	

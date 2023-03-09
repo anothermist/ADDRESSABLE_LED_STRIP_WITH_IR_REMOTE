@@ -48,6 +48,11 @@ int main(void) {
 			rtc_Hrs, rtc_Min, rtc_Sec, rtc_WDay, rtc_Date, rtc_Month, rtc_Year);
 			uartTransmitString(time_string); uartNewLine();
 			
+			//float celsius = 12.34; //DS3231_getTemp();
+			//char celsius_string[26];
+			//snprintf(celsius_string, 26, "TEMPERATURE %f", celsius);
+			//uartTransmitString_F(celsius_string); uartNewLine();
+			
 		}
 		
 		if (IR_HIGH) {

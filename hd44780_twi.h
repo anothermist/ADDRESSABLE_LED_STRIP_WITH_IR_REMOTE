@@ -6,12 +6,12 @@
 
 #pragma once
 
-#define E1   TWI_SendByteByADDR(portlcd|=0x04,0b01001110)
-#define E0   TWI_SendByteByADDR(portlcd&=~0x04,0b01001110)
-#define RS1    TWI_SendByteByADDR(portlcd|=0x01,0b01001110)
-#define RS0   TWI_SendByteByADDR(portlcd&=~0x01,0b01001110)
-#define setled()    TWI_SendByteByADDR(portlcd|=0x08,0b01001110)
-#define setwrite()   TWI_SendByteByADDR(portlcd&=~0x02,0b01001110)  // set write in memory
+#define E1			TWI_SendByteByADDR(portlcd|=0x04,0b01001110);
+#define E0			TWI_SendByteByADDR(portlcd&=~0x04,0b01001110);
+#define RS1			TWI_SendByteByADDR(portlcd|=0x01,0b01001110);
+#define RS0			TWI_SendByteByADDR(portlcd&=~0x01,0b01001110);
+#define SETLED		TWI_SendByteByADDR(portlcd|=0x08,0b01001110);
+#define SETWRITE	TWI_SendByteByADDR(portlcd&=~0x02,0b01001110); // set write in memory
 
 #define LCD_COL_COUNT 16
 #define LCD_ROW_COUNT 2
